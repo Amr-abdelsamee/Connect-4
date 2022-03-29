@@ -9,7 +9,7 @@ LOWER_PADDING = 20
 INBTWN_SPACE = 1
 
 # blocks constants
-CIRCLE_COLOR = (15,10,50)
+CIRCLE_COLOR = (155,45,205)
 
 
 class Puzzle:
@@ -32,6 +32,7 @@ class Puzzle:
         print(self.diameter)
 
         self.create_circles()
+        self.generate_playable()
 
 # create_rects creates the blocks of the game
     def create_circles(self):
@@ -51,6 +52,17 @@ class Puzzle:
             x = SIDES_PADDING + self.diameter/2
             y = y + self.diameter + INBTWN_SPACE
 
+    def generate_playable(self):
+        temp = []
+        for i in range(self.num_col):
+            inc = i 
+            for j in range(self.num_row):
+                temp.append(inc)
+                inc += self.num_col
+            print(temp)
+            self.playable.append(copy(temp))
+            temp.clear()
+            
 
 
     def get_col_clicked(self, x_clicked, y_clicked):
