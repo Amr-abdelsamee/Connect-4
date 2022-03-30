@@ -21,13 +21,15 @@ class Puzzle:
         self.circles = [] # array of obj
         self.playable = [] # array of ints
         self.occupied = [] # array of ints
+        
         # self.clickable_ranges = []
         self.screen_width = screen_width
         self.screen_height = screen_height
         self.num_row = num_row
         self.num_col = num_col
 
-        self.player_turn = 1
+        self.state = '0' * (self.num_row * self.num_col)
+        self.player_turn = '1'
         
         # calculate the block width and height depending on the screen width and height
         self.diameter = (self.screen_width - (2 * SIDES_PADDING) - (
@@ -84,12 +86,17 @@ class Puzzle:
         if col_index != None:
             if self.playable[col_index]:
                 circle_index = max(self.playable[col_index])
+                self.circles[circle_index].update(self.screen, color, owner)
                 self.playable[col_index].remove(circle_index)
                 self.occupied.append(circle_index)
+                self.update_state(circle_index, owner)
 
-                self.circles[circle_index].update(self.screen, color, owner)
+    def update_state(self, index, player):
+        self.state = list(self.state)
+        self.state[index] = player
+        self.state = "".join(self.state)
 
-    def get_score():
+    def get_score(self):
         pass
 
 
@@ -97,12 +104,14 @@ class Puzzle:
         if len(self.occupied) == self.num_col*self.num_row:
             print("calc score")
             self.get_score()
+            
 
-        elif self.player_turn == 1:
-            self.throw(x_clicked, y_clicked, PLAYER1_CIRCLE_COLOR, '1')
-            self.player_turn = 2
-        elif self.player_turn == 2:
-            self.throw(x_clicked, y_clicked, PLAYER2_CIRCLE_COLOR, '2')
-            self.player_turn = 1
+        elif self.player_turn == '1':
+            self.throw(x_clicked, y_clicked, PLAYER1_CIRCLE_COLOR, self.player_turn)
+            self.player_turn = '2'
+        elif self.player_turn == '2':
+            self.throw(x_clicked, y_clicked, PLAYER2_CIRCLE_COLOR, self.player_turn)
+            self.player_turn = '1'
+        print(self.state)
         
 
