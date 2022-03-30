@@ -10,7 +10,7 @@ INBTWN_SPACE = 1
 
 # blocks constants
 CIRCLE_COLOR = (155,45,205)
-
+PLAYED_CIRCLE_COLOR = (12, 90, 55)
 
 class Puzzle:
 
@@ -29,7 +29,6 @@ class Puzzle:
         # calculate the block width and height depending on the screen width and height
         self.diameter = (self.screen_width - (2 * SIDES_PADDING) - (
                     self.num_col * INBTWN_SPACE - 1)) / self.num_col
-        print(self.diameter)
 
         self.create_circles()
         self.generate_playable()
@@ -59,16 +58,13 @@ class Puzzle:
             for j in range(self.num_row):
                 temp.append(inc)
                 inc += self.num_col
-            print(temp)
             self.playable.append(copy(temp))
             temp.clear()
-            
-
 
     def get_col_clicked(self, x_clicked, y_clicked):
         last_circle_index = (self.num_col * self.num_row) -1
         y_end = self.circles[last_circle_index].y_pos + (self.diameter/2)
-        print(y_end)
+
         for i in range(self.num_col):
             x_start = self.circles[i].x_pos - (self.diameter/2)
             x_end = self.circles[i].x_pos + (self.diameter/2)
@@ -79,3 +75,11 @@ class Puzzle:
             and y_clicked < y_end):
                 return i
 
+    def play(self, x_clicked, y_clicked):
+        col_index = self.get_col_clicked(x_clicked, y_clicked)
+        if col_index != None:
+            if self.playable[col_index]:
+                circle_index = max(self.playable[col_index])
+                self.playable[col_index].remove(circle_index)
+                self.occupied.append(circle_index)
+                self.circles[circle_index].update(self.screen, PLAYED_CIRCLE_COLOR)
