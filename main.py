@@ -13,8 +13,8 @@ NUM_ROW = 6
 NUM_COL = 7
 
 # size constants
-SCREEN_WIDTH = 900
-SCREEN_HEIGHT = SCREEN_WIDTH + 50
+SCREEN_WIDTH = 670
+SCREEN_HEIGHT = SCREEN_WIDTH + 100
 SIDES_PADDING = 10
 
 WHITE = (255, 255, 255)
@@ -103,7 +103,6 @@ def AI_window():
     pygame.quit()
 
 
-pygame.init()
 
 def message(image_name):
     tree_screen = Tk()
@@ -127,23 +126,16 @@ def message(image_name):
 
 
 def tree_window(states):
-    # states = [["1",["1st_state_child1","1st_state_child2","1st_state_child3","1st_state_child4"]],
-    #         ["2",["2nd_state_child1","2nd_state_child2","2nd_state_child3","2nd_state_child4"]],
-    #         ["3",["3rd_state_child"]],
-    #         ["4",["4th_state_child1","4th_state_child3","4th_state_child4"]],
-    #         ["1st_state_child2",["5th_state_child1","4th_state_child3"]],
-    #         ["6",["6th_state_child1","4th_state_child3"]],
-    #         ["7",["7th_state_child1","4th_state_child3"]]
-    #         ]
     tree = Tree(states, NUM_COL, NUM_ROW)
     image_name = tree.png_name +'.'+tree.extension
     message(image_name)
 
 
 
+pygame.init()
 # starting the pygame screen
 game_screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-# draw the background 
+# draw the backgroun
 game_screen.fill(BG_COLOR)
 # game_screen.blit(BGROUND_IMG,(0,0))
 # set the title
@@ -156,12 +148,11 @@ pygame.display.set_icon(icon)
 
 start_window()
 if start_players:
+    game_screen.fill(BG_COLOR)
     puzzle = Puzzle(game_screen, NUM_ROW, NUM_COL, SCREEN_WIDTH, SCREEN_HEIGHT)
+    # playing_circle = Circle(game_screen, puzzle.circles[0].x_pos, puzzle.circles[0].y_pos - puzzle.diameter-10, puzzle.player1_color, puzzle.diameter/2)
+    # playing_circle.draw()
 
-    playing_circle = Circle(game_screen, puzzle.circles[0].x_pos, puzzle.circles[0].y_pos - puzzle.diameter-10, puzzle.player1_color, puzzle.diameter/2)
-    playing_circle.draw()
-
-    running = True # running condition
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -173,15 +164,15 @@ if start_players:
                 if x_hovered > puzzle.circles[0].x_pos and x_hovered < puzzle.circles[NUM_COL-1].x_pos:
                     clear_rect = pygame.Rect(0, 0, SCREEN_WIDTH, 140)
                     pygame.draw.rect(game_screen, BG_COLOR, clear_rect)
-                    playing_circle.change_pos(x_hovered, puzzle.circles[0].y_pos - puzzle.diameter-10)
+                    # playing_circle.change_pos(x_hovered, puzzle.circles[0].y_pos - puzzle.diameter-10)
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 # store the coordinates of the clicked position
                 x_clicked, y_clicked = pygame.mouse.get_pos()
 
                 puzzle.play(x_clicked , y_clicked)
-                if puzzle.player_turn == '2': playing_circle.update(puzzle.player2_color, '0')
-                else: playing_circle.update(puzzle.player1_color, '0')
+                # if puzzle.player_turn == '2': playing_circle.update(puzzle.player2_color, '0')
+                # else: playing_circle.update(puzzle.player1_color, '0')
                 pygame.display.update()
                 # if puzzle.player_turn == '1': tree_window(copy(puzzle.states))
 
